@@ -11,11 +11,11 @@ def select_cashback(card:dict):
     acum_props = np.array(props).cumsum()
     return acum_props
 
-
+cost_1 = 3000
 card_1 = {
     0:[1, 0.02]
 }
-
+cost_2 = 300
 card_2 = {
     0: [0.5, 0],
     1: [0.25, 0.04],
