@@ -1,10 +1,19 @@
 import numpy as np
+from scipy.stats import skewcauchy
 
+parameters = {'a': 0.9740369762791558, 'loc': 15.03607366592095, 'scale': 42.95071842779828}
+
+
+
+r = (skewcauchy.rvs(parameters['a'], size=1000) + parameters['loc']) * parameters['scale']
+
+print(r)
 def generate():
-    x = np.random.normal(0,1)
+    x = skewcauchy.rvs(parameters['a'])
+    x = (parameters['loc'] + x) * parameters['scale'] 
     return x
 
-def select_cashback(card:dict):
+def select_cashback(card: dict):
     options = card.keys()
     props = [card[o][0] for o in options]
     props = [0] + props
