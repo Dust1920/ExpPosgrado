@@ -66,13 +66,51 @@ def plot_cashback(mode, card, limit):
             compras, comcash = model.simul_creditcard(limit, Tarjeta_1)
         if card == "Tarjeta 2":
             compras, comcash = model.simul_creditcard(limit, Tarjeta_2)
-        if card == "Custom":
+        if card == "Tarjeta 3":
             compras, comcash = model.simul_creditcard(limit, Tarjeta_3)
         if mode == "Compras":
             fig = px.line(x = range(1,len(compras) + 1), y = compras)
         else:
             fig = px.line(x = range(1,len(comcash) + 1), y = comcash)
     return fig
+
+@app.callback(
+    Output("card-data","children"), Input("plot-mode","value"), Input("cards","value"), Input("limit","value")
+)
+
+def cashback_mean(mode, card, limit):
+    Tarjeta_1 = {
+        "Nombre": "Tarjeta 1",
+        "Cashback": {
+            "Porcentaje": [0.02],
+            "Probabilidad": [1]
+        } 
+    }
+    Tarjeta_2 = {
+        "Nombre": "Tarjeta 2",
+        "Cashback": {
+            "Porcentaje": [0, 0.04, 0.05, 0.06],
+            "Probabilidad": [0.7, 0.1 ,0.1 , 0.1]
+        } 
+    }
+
+    Tarjeta_3 = {
+        "Nombre": "Tarjeta 3",
+        "Cashback": {
+            "Porcentaje": [0.005, 0.05, 0.05, 0.05],
+            "Probabilidad": [0.85, 0.05 ,0.05 , 0.05]
+        } 
+    }
+    cb_m = 0 
+    if mode:
+        if card == "Tarjeta 1":
+            cb_m = model.cb_mean(limit, Tarjeta_1)
+        if card == "Tarjeta 2":
+            cb_m = model.cb_mean(limit, Tarjeta_2)
+        if card == "Tarjeta 3":
+            cb_m = model.cb_mean(limit, Tarjeta_3)
+    text = f"Con una muestra de {model.N_SIMUL} simulaciones, la tarjeta genera un cashback promedio de {round(cb_m, 2)}%"
+    return text
 
 
 

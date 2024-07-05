@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 
 
 np.random.seed(300)
+rng = np.random.RandomState(300)
 parameters = {'a': 0.9740369762791558, 'loc': 15.03607366592095, 'scale': 42.95071842779828}
 
-
 PERIOD = 30  # dias
-N_SIMUL = 100
+N_SIMUL = 1000
 
 def generate():
     x = skewcauchy.rvs(parameters['a'])
@@ -48,7 +48,7 @@ def simul_creditcard(limit, card):
     histpchbk = np.zeros(PERIOD + 1)
     i = 0
     while history.sum() <= limit:
-        u = np.random.uniform(0,1)
+        u = rng.uniform(0,1)
         history[i] = data[i]
         cashback = calc_cashback(card, u)
         histpchbk[i] = history[i] * cashback
@@ -62,7 +62,7 @@ def cashback_prom(limit, card):
     h, cb = simul_creditcard(limit, card)
     mh = h.sum()
     mcb = cb.sum()
-    cbt = mh / mcb
+    cbt = mcb / mh * 100
     cbt = round(cbt, 2)
     return cbt
 
