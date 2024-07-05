@@ -1,13 +1,13 @@
 import numpy as np
 from scipy.stats import skewcauchy
+import matplotlib.pyplot as plt
+
+np.random.seed(300)
 
 parameters = {'a': 0.9740369762791558, 'loc': 15.03607366592095, 'scale': 42.95071842779828}
 
 
 
-r = (skewcauchy.rvs(parameters['a'], size=1000) + parameters['loc']) * parameters['scale']
-
-print(r)
 def generate():
     x = skewcauchy.rvs(parameters['a'])
     x = (parameters['loc'] + x) * parameters['scale'] 
@@ -32,6 +32,9 @@ card_2 = {
     3: [0.05, 0.06]
 }
 
+
+
+
 print(select_cashback(card_2))
 
 def check_pos_interval(intervals:list, value):
@@ -45,4 +48,30 @@ def check_pos_interval(intervals:list, value):
             pos += 1
     return pos
 
+data = [generate() for _ in range(30)]
 
+def exp_month(limit):
+    max_days = 30
+    data = np.zeros(max_days)
+    i = 0
+    while data.sum() <= limit:
+        data[i] = generate()
+        i += 1
+        if i == 30:
+            break
+    return data
+compras = exp_month(50000)
+acum_compras = compras.cumsum()
+
+def calc_cashback(exps, cashrule):
+    cashback = np.zeros(len(exps))
+    for i, e in enumerate(exps):
+        u = np.random.uniform(0,1)
+        if u < 0.5:
+            cashback[i] = 1
+    return cashback
+    
+
+plt.plot(compras)
+plt.plot(acum_compras)
+plt.show()

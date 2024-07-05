@@ -1,7 +1,6 @@
 from scipy import stats
 import pandas as pd
 import numpy as np
-import tqdm
 import inspect
 import warnings
 warnings.filterwarnings('ignore')
@@ -196,22 +195,3 @@ def comparar_distribuciones(x, familia='realall', ordenar='aic', verbose=True):
             print("")
             
     return resultados
-
-consum = pd.read_excel("Egresos.xlsx", sheet_name="Gastos Anuales")
-consum = consum[consum['Monto']>0]
-
-consum_data = consum['Monto']
-
-
-
-
-
-
-resultados = comparar_distribuciones(
-                x=consum_data.to_numpy(),
-                familia='realall',
-                ordenar='aic',
-                verbose=False
-            )
-print(resultados.iloc[0])
-
