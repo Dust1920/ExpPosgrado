@@ -10,6 +10,7 @@ BPlatinum = Creditcard(credit_limit=100_000, grace_time=20)
 SClassic = Creditcard(credit_limit=100_000, grace_time=20)
 SSimply = Creditcard(credit_limit=100_000, grace_time=20)
 
+
 # HSBC 2Now
 H2NOW.select_benefits(cashback = [1, {"General": 0.02}])
 
