@@ -29,6 +29,7 @@ def prop_s(moo):
     # Transactions
     trans_y = transactions[transactions['Year'] == y0]
     trans_ym = trans_y[trans_y['Month'] == moo]
+    trans_ym = trans_y.copy()
     if len(exp_ym) == 0:
         return 0
 
@@ -93,12 +94,24 @@ def prop_s(moo):
     m_ent = exp_ent['Amount'].sum() if len(exp_ent) > 0 else 0
     # print(m_ent)
 
+
+    ##print(exp_ent.shape)
+    # print(exp_ent)
+    ##print(exp_res.shape)
+    ##print(exp_gas.shape)
+    ##print(exp_phar.shape)
     props = {
         "Farmacia":len(exp_phar) / len(expenses),
         "Rest y Ent":(len(exp_ent) + len(exp_res))/ len(expenses),
         "Gasolina":len(exp_gas) / len(expenses)
     }
+    gan_sp = {
+        "Farmacia": m_phar,
+        "Rest y Ent": (m_ent + m_res) ,
+        "Gasolina": m_gas
+    }
 
+    # print(gan_sp)
     # print(props)
 
     gan_p = {
@@ -110,8 +123,35 @@ def prop_s(moo):
     S = 0
     v = [0.06, 0.05, 0.04]
     for t, x in enumerate(gan_p.keys()):
-        S += v[t] * gan_p[x]
+        S += v[t] * gan_sp[x]
+    S = S / exp_ym['Amount'].sum()
+
+    f = exp_ym[exp_ym['Amount'] > 3_000]
+    print(f"{moo} mayor en 3000 {len(f) / len(exp_ym)}")
+
     return S
 
+s = {}
 for m in MONTHS:
-    print(m, prop_s(m))
+    if prop_s(m) > 0:
+        s[m] = prop_s(m)
+
+print(MONTHS)
+
+MS = ['January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August', 'September']
+
+y = [s[m] * 100 for m in MS]
+
+print(s)
+import matplotlib.pyplot as plt
+import numpy as np
+
+sss, ax = plt.subplots(1,1, figsize = (15,12))
+ax.plot(MS, y)
+# ax.set_title("Cashback 'relativo'")
+print(np.array(y).mean())
+plt.tight_layout()
+plt.show()
+
+
